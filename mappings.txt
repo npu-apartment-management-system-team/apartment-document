@@ -360,28 +360,8 @@ DELETE /apartment-apartment/_doc/2
 PUT /apartment-message
 {
   "settings": {
-    "analysis": {
-      "analyzer": {
-        "text_anlyzer": {
-          "tokenizer": "ik_max_word"
-        },
-        "completion_analyzer": {
-          "tokenizer": "keyword",
-          "filter": "py"
-        }
-      },
-      "filter": {
-        "py": {
-          "type": "pinyin",
-          "keep_full_pinyin": false,
-          "keep_joined_full_pinyin": true,
-          "keep_original": true,
-          "limit_first_letter_length": 16,
-          "remove_duplicated_term": true,
-          "none_chinese_pinyin_tokenize": false
-        }
-      }
-    }
+    "number_of_shards": 1,
+    "number_of_replicas": 0
   },
   "mappings": {
     "properties": {
@@ -390,7 +370,7 @@ PUT /apartment-message
       },
       "message": {
         "type": "text",
-        "analyzer": "text_anlyzer",
+        "analyzer": "ik_max_word",
         "search_analyzer": "ik_smart",
         "copy_to": "all"
       },
@@ -398,7 +378,9 @@ PUT /apartment-message
         "type": "keyword"
       },
       "senderAdminName": {
-        "type": "keyword",
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_smart",
         "copy_to": "all"
       },
       "receiverIds": {
@@ -415,10 +397,6 @@ PUT /apartment-message
         "type": "text",
         "analyzer": "text_anlyzer",
         "search_analyzer": "ik_smart"
-      },
-      "suggestion": {
-        "type": "completion",
-        "analyzer": "completion_analyzer"
       }
     }
   }
